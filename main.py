@@ -11,6 +11,7 @@ today = datetime.now()
 start_date = os.environ['START_DATE']
 city = os.environ['CITY']
 birthday = os.environ['BIRTHDAY']
+man_birthday = os.environ['MAN_BIRTHDAY']
 end_study = os.environ['END_STUDY']
 
 app_id = os.environ["APP_ID"]
@@ -45,6 +46,12 @@ def get_birthday():
     next = next.replace(year=next.year + 1)
   return (next - today).days
 
+def get_man_birthday():
+  next = datetime.strptime(str(date.today().year) + "-" + man_birthday, "%Y-%m-%d")
+  if next < datetime.now():
+    next = next.replace(year=next.year + 1)
+  return (next - today).days
+
 def get_end_study():
   next = datetime.strptime(str(date.today().year) + "-" + end_study, "%Y-%m-%d")
   if next < datetime.now():
@@ -65,7 +72,7 @@ client = WeChatClient(app_id, app_secret)
 
 wm = WeChatMessage(client)
 wea, temperature,low,high = get_weather()
-data = {"date":{"value":get_today(), "color":get_random_color()},"city":{"value":city, "color":get_random_color()},"low":{"value":str(low)+"℃", "color":get_random_color()},"high":{"value":str(high)+"℃", "color":get_random_color()},"weather":{"value":wea, "color":get_random_color()},"temperature":{"value":temperature, "color":get_random_color()},"love_days":{"value":get_count(), "color":get_random_color()},"end_study":{"value":get_end_study(), "color":get_random_color()},"birthday":{"value":get_birthday(), "color":get_random_color()},"words":{"value":get_words(), "color":get_random_color()}}
+data = {"date":{"value":get_today(), "color":get_random_color()},"city":{"value":city, "color":get_random_color()},"low":{"value":str(low)+"℃", "color":get_random_color()},"high":{"value":str(high)+"℃", "color":get_random_color()},"weather":{"value":wea, "color":get_random_color()},"temperature":{"value":temperature, "color":get_random_color()},"love_days":{"value":get_count(), "color":get_random_color()},"end_study":{"value":get_end_study(), "color":get_random_color()},"birthday":{"value":get_birthday(), "color":get_random_color()},"man_birthday":{"value":get_man_birthday(), "color":get_random_color()},"words":{"value":get_words(), "color":get_random_color()}}
 res = wm.send_template(user_id, template_id, data)
 res2 = wm.send_template(user_id2, template_id, data)
 print(res)
